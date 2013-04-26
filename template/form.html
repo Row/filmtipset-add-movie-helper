@@ -1,0 +1,91 @@
+<div id="filmtipset">
+    <form action="http://nyheter24.se/filmtipset/addmovie.cgi" method="post">
+        <fieldset>
+            <legend>Filmtipset</legend>
+                <input type="hidden" name="action" value="insert">
+                <input type="hidden" name="object" value="">
+                <fieldset>
+                    <legend>Titlar</legend>
+                    <label>
+                        Svensktitel
+                        <input value="%title%" name="name" size="30" type="text">
+                    </label>
+                    <label>
+                        Originaltitel
+                        <input value="%originaltitle%" name="orgname" size="30" type="text">
+                    </label>
+                    <label>
+                        Alternativ titel: (en per rad)
+                        <textarea name="alt_titles" rows="3" cols="30" wrap="virtual">%alttitles%</textarea>
+                    </label>
+                </fieldset>      
+                <fieldset>
+                    <legend>Information</legend>
+                    <label>
+                        IMDb-nummer
+                        <input value="%imdb%" name="imdbnr" size="8" type="text">
+                    </label>
+                    <input value="" name="infolink" size="30" type="hidden">
+                    <label>
+                        Meddelande till den som ska verifiera informationen.
+                        <textarea name="submitter_comment" rows="3" cols="30" wrap="virtual"></textarea>
+                    </label>
+                    <label>
+                        Utgivningsår
+                        <input value="%year%" name="year" size="5" type="text">
+                    </label>
+                    <label>
+                        Regissör
+                        <input value="%directors%" name="director" size="30" type="text">
+                    </label>
+                    <label>
+                        Manus
+                        <input value="%writers%" name="writer" size="30" type="text">
+                    </label>
+                    <label>
+                        Skådespelare
+                        <textarea name="actors" rows="3" cols="30" wrap="virtual">%actors%</textarea>
+                    </label>
+                    <label>
+                        Längd i minuter
+                        <input name="length" value="%runtime%" size="5" type="text">
+                    </label>
+                    <label>
+                        Produktionsländer
+                        <input type="text" value="%countries%" name="country">
+                    </label>
+                    <div id="untranslated">
+                        <script>
+                        $(function() {
+                            var array = %untranslated%;
+                            $(array).each(function(i, str) {
+                                $('<div class="translate"><label>Översätt "' + this + '" till <input name="translate"></label><input type="button" value="Översätt"></div>').appendTo($('#untranslated'))
+                                    .find('input[type=button]').click(function(e) {
+                                        var value = $(this).parent().hide().find("input[name=translate]").val();
+                                        var currentValue = $('input[name=country]').val();
+                                        
+                                        if(currentValue == '')
+                                            $('input[name=country]').val(value);
+                                        else
+                                            $('input[name=country]').val(currentValue+','+value);
+
+                                        $.post('',{
+                                            english: str,
+                                            swedish: value,
+                                            action: 'translateCountry'
+                                        }, function(data) {console.log(data)})
+                                    });
+                            });
+                        })
+                        </script>
+                    </div>
+                    <label>
+                        Handling
+                        <div id="plot">%plot%</div>
+                        <textarea name="info" rows="6" cols="30" wrap="virtual"></textarea>
+                    </label>
+                    <input type="submit" value="Skicka vidare till Filmtipset">
+                </fieldset>
+        </fieldset>
+    </form>
+</div>

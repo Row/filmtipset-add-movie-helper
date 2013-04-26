@@ -1,0 +1,75 @@
+body, div, input, textarea {
+    font-family: Arial, Geneva, sans-serif;
+    font-size: 1em;
+}
+
+#wrapper {
+    width: 790px;
+    margin: 0 auto;
+}
+
+#wrapper fieldset {
+    background: #F3F4E7;
+}
+
+#wrapper fieldset fieldset {
+    background: #F3F4E7;
+}
+
+#filmtipset input, #filmtipset textarea {
+    display: block;
+    width: 500px;
+}
+
+#filmtipset label {
+    margin: 8px;
+    display: block;
+    font-weight: 800;
+}
+
+input,textarea {padding: 3px;}
+
+textarea {height: 200px;}
+
+input[type="submit"] {
+    cursor: pointer;
+    width: 250px !important;
+}
+
+#filmtipset .translate {
+    display: block;
+    float: left;
+    clear: left;
+    width: 700px;
+    white-space: nowrap;
+}
+#filmtipset .translate>label {
+    display: inline-block;
+    color: red;
+}
+#filmtipset .translate>label>input {
+    display: inline-block;
+    width: 250px;
+}
+#filmtipset .translate input[type="button"] {
+    display: inline-block;
+    cursor: pointer;
+    width: 100px;
+}
+
+#plot {
+    margin: 10px;
+    line-height: 1.5em;
+    font-weight: 500;
+}
+
+#error {
+    color: #FF0000;
+    border: 3px solid #FF0000;
+    padding: 20px;
+    margin: 20px;
+}
+#foot {
+    font-size: 9px; text-align: center;
+    
+}
