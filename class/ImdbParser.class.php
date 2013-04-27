@@ -14,7 +14,7 @@ class ImdbParser
         $this->movieInfo = $movieInfo;
         $url = sprintf('http://www.imdb.com/title/tt%s/', $movieInfo->getImdbId());
         $this->data = file_get_contents($url);
-        if(!$this->data)
+        if (!$this->data)
             throw new Exception("Unable to load movie data from IMDb");
         $htmlDom = DOMDocument::loadHTML($this->data);
         $this->xpath = new DOMXpath($htmlDom);
@@ -35,23 +35,17 @@ class ImdbParser
         $this->parseRuntime();
     }
 
-    //<title>Megamind (2010) - IMDb</title>
     private function parseTitle()
     {
-        if(preg_match('#<title>(.*?) \(\d{4}\) - IMDb#', $this->data, $m))
+        if (preg_match('#<title>(.*?) \(\d{4}\) - IMDb#', $this->data, $m))
             $this->movieInfo->setTitle($m[1]);
     }
-    
-    /*
-        <span class="title-extra">
-The Lord of the Rings: The Fellowship of the Ring 
-<i>(original title)</i>
-</span>
-
-    */    
+      
     private function parseOriginalTitle()
     {
-        if(preg_match('#<span class="title-extra">\n([^\n]+)#', $this->data, $m))
+        $query = "//span[@class='title-extra']";
+        $entries = $this->xpath->evaluate($query); 
+        if ($entries && $entries->length && preg_match('#^[\s\n]+"(.*?)"#', $entries->item(0)->nodeValue, $m))
             $this->movieInfo->setOriginalTitle($m[1]);
         else
             $this->movieInfo->setOriginalTitle($this->movieInfo->getTitle());
@@ -59,18 +53,13 @@ The Lord of the Rings: The Fellowship of the Ring
 
     private function parseYear()
     {
-        if(preg_match('#<title>.*? \((\d{4})\) - IMDb#', $this->data, $m))
+        if (preg_match('#<title>.*? \((\d{4})\) - IMDb#', $this->data, $m))
             $this->movieInfo->setYear($m[1]);
     }
 
-    /*
-        Director:
-  </h4>
-<a  href="/name/nm0569891/">Tom McGrath</a></div>
-    */
     private function parseDirectors()
     {
-        $query = "descendant-or-self::a[@itemprop = 'director']";
+        $query = "descendant-or-self::div[@itemprop = 'director']/a/span[@itemprop = 'name']";   
         $entries = $this->xpath->query($query);
         foreach ($entries as $entry) {
             $this->movieInfo->addDirector($entry->nodeValue);
@@ -95,7 +84,7 @@ The Lord of the Rings: The Fellowship of the Ring
     */
     private function parseActors()
     {
-        $query = "descendant-or-self::table[contains(concat(' ', normalize-space(@class), ' '), ' cast_list ')]/descendant::td[contains(concat(' ', normalize-space(@class), ' '), ' name ')]/descendant::a";   
+        $query = "descendant-or-self::table[@class = 'cast_list']/tr/td[@itemprop = 'actor']/a/span[@itemprop = 'name']";   
         $entries = $this->xpath->query($query);
         foreach ($entries as $entry) {
             $this->movieInfo->addActor($entry->nodeValue);
@@ -111,47 +100,27 @@ The Lord of the Rings: The Fellowship of the Ring
             $this->movieInfo->addCountry($entry->nodeValue);
         }
     }
-/*
-    Also Known As:</h4> Megaagy
-        */
     
     private function parseAltTitles()
     {
-        if(preg_match('#Also Known As:</h4>(.*?)<span#s', $this->data, $m))
-            if(preg_match_all('#^.*?$#', $m[1], $m1))
-                foreach($m1[0] as $var)
+        if (preg_match('#Also Known As:</h4>(.*?)<span#s', $this->data, $m))
+            if (preg_match_all('#^.*?$#', $m[1], $m1))
+                foreach ($m1[0] as $var)
                     $this->movieInfo->addAltTitle($var);
-
     }
-
-    /*
-        <h2>Storyline</h2>
-
-<p>After super-villain Megamind (Ferrell) kills his good-guy nemesis, Metro Man (Pitt), he becomes bored since there is no one left to fight. He creates a new foe, Titan (Hill), who, instead of using his powers for good, sets out to destroy the world, positioning Megamind to save the day for the first time in his life.
-
-<em
-    */
 
     private function parsePlot()
     {
-        if(preg_match('#<h2>Storyline</h2>.*?<p>([^<]+)#s', $this->data, $m))
+        if (preg_match('#<h2>Storyline</h2>.*?<p>([^<]+)#s', $this->data, $m))
             $this->movieInfo->setPlot($m[1]);
 
     }
 
-/*
-    Runtime:</h4> 
-
-
-96 min
-
-</div>
-
-*/
-
     private function parseRuntime()
     {
-        if(preg_match('#Runtime:</h4>.*?(\d+).*?</div>#s', $this->data, $m))
-            $this->movieInfo->setRuntime($m[1]);
+        $query = "//time[@itemprop='duration']";   
+        if ($entries = $this->xpath->evaluate($query))
+            if ($min = preg_replace('#[^\d]+#', '', $entries->item(0)->nodeValue))
+                $this->movieInfo->setRuntime($min);
     }
 }
