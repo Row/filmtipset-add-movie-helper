@@ -89,9 +89,9 @@ class Controller
         $translator = Translator::getInstance();
 
         $translator->insert($_REQUEST['english'], $_REQUEST['swedish']);
-        
+
         print('ok: ' . $_REQUEST['english'] . ', ' . $_REQUEST['swedish']);
-            
+
     }
 
     private function error($message)

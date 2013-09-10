@@ -20,12 +20,12 @@ class MovieInfo
     {
         # code...
     }
-    
+
     public function __toString()
     {
         return $this->title;
     }
-    
+
     public function setImdbId($var)
     {
         $this->imdbId = $var;
@@ -75,7 +75,7 @@ class MovieInfo
     {
         return $this->plot;
     }
-    
+
     public function setRuntime($var)
     {
         $this->runtime = $var;
@@ -85,7 +85,7 @@ class MovieInfo
     {
         return $this->runtime;
     }
-    
+
     public function addDirector($string)
     {
         $this->directors[] = (string) $string;

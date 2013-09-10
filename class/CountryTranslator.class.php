@@ -26,7 +26,7 @@ class CountriesTranslate
         $this->sthFromEnglish->execute(array($english));
         return $this->sthFromEnglish->fetchAll(PDO::FETCH_ASSOC);
     }
-    
+
     public function displayAll()
     {
         $this->sthAll->execute();

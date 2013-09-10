@@ -40,11 +40,11 @@ class ImdbParser
         if (preg_match('#<title>(.*?) \((?:TV Movie )?\d{4}\) - IMDb#', $this->data, $m))
             $this->movieInfo->setTitle($m[1]);
     }
-      
+
     private function parseOriginalTitle()
     {
         $query = "//span[@class='title-extra']";
-        $entries = $this->xpath->evaluate($query); 
+        $entries = $this->xpath->evaluate($query);
         if ($entries && $entries->length && preg_match('#^[\s\n]+"(.*?)"#', $entries->item(0)->nodeValue, $m))
             $this->movieInfo->setOriginalTitle($m[1]);
         else
@@ -59,7 +59,7 @@ class ImdbParser
 
     private function parseDirectors()
     {
-        $query = "descendant-or-self::div[@itemprop = 'director']/a/span[@itemprop = 'name']";   
+        $query = "descendant-or-self::div[@itemprop = 'director']/a/span[@itemprop = 'name']";
         $entries = $this->xpath->query($query);
         foreach ($entries as $entry) {
             $this->movieInfo->addDirector($entry->nodeValue);
@@ -71,7 +71,7 @@ class ImdbParser
     */
     private function parseWriters()
     {
-        $query = "descendant-or-self::h4[contains(text(), 'Writer')]/../a[contains(@href, 'name')]";   
+        $query = "descendant-or-self::h4[contains(text(), 'Writer')]/../a[contains(@href, 'name')]";
         $entries = $this->xpath->query($query);
         foreach ($entries as $entry) {
             $this->movieInfo->addWriter($entry->nodeValue);
@@ -84,7 +84,7 @@ class ImdbParser
     */
     private function parseActors()
     {
-        $query = "descendant-or-self::table[@class = 'cast_list']/tr/td[@itemprop = 'actor']/a/span[@itemprop = 'name']";   
+        $query = "descendant-or-self::table[@class = 'cast_list']/tr/td[@itemprop = 'actor']/a/span[@itemprop = 'name']";
         $entries = $this->xpath->query($query);
         foreach ($entries as $entry) {
             $this->movieInfo->addActor($entry->nodeValue);
@@ -94,13 +94,13 @@ class ImdbParser
 
     private function parseCountries()
     {
-        $query = "descendant-or-self::h4[contains(text(), 'Count')]/../a[contains(@href, 'country')]";   
+        $query = "descendant-or-self::h4[contains(text(), 'Count')]/../a[contains(@href, 'country')]";
         $entries = $this->xpath->query($query);
         foreach ($entries as $entry) {
             $this->movieInfo->addCountry($entry->nodeValue);
         }
     }
-    
+
     private function parseAltTitles()
     {
         if (preg_match('#Also Known As:</h4>(.*?)<span#s', $this->data, $m))
@@ -118,7 +118,7 @@ class ImdbParser
 
     private function parseRuntime()
     {
-        $query = "//time[@itemprop='duration']";   
+        $query = "//time[@itemprop='duration']";
         if ($entries = $this->xpath->evaluate($query))
             if ($min = preg_replace('#[^\d]+#', '', $entries->item(0)->nodeValue))
                 $this->movieInfo->setRuntime($min);

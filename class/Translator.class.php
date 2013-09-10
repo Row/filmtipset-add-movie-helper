@@ -22,7 +22,7 @@ class Translator
         return $instance;
     }
 
-    public function getTranslated($arrayEnglish) 
+    public function getTranslated($arrayEnglish)
     {
         $result = array();
         foreach ($arrayEnglish as $value) {
@@ -33,7 +33,7 @@ class Translator
         return $result;
     }
 
-    public function getUntranslated($arrayEnglish) 
+    public function getUntranslated($arrayEnglish)
     {
         $result = array();
         foreach ($arrayEnglish as $value) {
@@ -49,7 +49,7 @@ class Translator
         $result = $this->sthFromEnglish->fetchAll(PDO::FETCH_ASSOC);
         return count($result) ? $result[0]['swedish'] : false;
     }
-    
+
     public function getAll()
     {
         $this->sthAll->execute();
