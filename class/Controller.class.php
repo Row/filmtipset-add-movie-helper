@@ -34,7 +34,8 @@ class Controller
     {
         $movie = new MovieInfo();
         $id = isset($_REQUEST['imdbid']) ?
-            preg_replace('#[^\d]#', '', $_REQUEST['imdbid'])
+            preg_replace(
+                array('#\?.+$#', '#[^\d]#'), '', $_REQUEST['imdbid'])
             :
             '0000';
         $translator = Translator::getInstance();
