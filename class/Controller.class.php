@@ -64,21 +64,22 @@ class Controller
         $foot = new template('template/foot.html');
 
         header('Content-Type: text/html; charset=iso-8859-1');
-        
+
         print(
             $head->render() .
             $input->render() .
             $form->render() .
             $foot->render()
         );
-        
-        file_put_contents('add_log.log', 
-            sprintf("%s %15s %-20.20s (%4s) \r\n", 
-                date('Y-m-d H:i:s'), 
-                $_SERVER['REMOTE_ADDR'], 
+
+        file_put_contents('add_log.log',
+            sprintf("%s %15s %-20.20s (%4s) %12s\r\n",
+                date('Y-m-d H:i:s'),
+                $_SERVER['REMOTE_ADDR'],
                 $movie->getTitle(),
-                $movie->getYear()), FILE_APPEND);
-        
+                $movie->getYear(),
+                $movie->getImdbId()), FILE_APPEND);
+
     }
 
     private function translateCountry()
