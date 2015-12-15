@@ -59,7 +59,7 @@ class ImdbParser
 
     private function parseDirectors()
     {
-        $query = "descendant-or-self::div[@itemprop = 'director']/a/span[@itemprop = 'name']";
+        $query = "descendant-or-self::*[@itemprop='director']/a/span[@itemprop='name']";
         $entries = $this->xpath->query($query);
         foreach ($entries as $entry) {
             $this->movieInfo->addDirector($entry->nodeValue);
