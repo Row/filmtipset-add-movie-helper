@@ -65,13 +65,12 @@ class ImdbParser
             $this->movieInfo->addDirector($entry->nodeValue);
         }
     }
-
     /*
         XXX Correct type?
     */
     private function parseWriters()
     {
-        $query = "descendant-or-self::h4[contains(text(), 'Writer')]/../a[contains(@href, 'name')]";
+        $query = "descendant-or-self::h4[contains(text(), 'Writer')]/../span/a/span[@itemprop='name']";
         $entries = $this->xpath->query($query);
         foreach ($entries as $entry) {
             $this->movieInfo->addWriter($entry->nodeValue);
