@@ -37,7 +37,7 @@ class ImdbParser
 
     private function parseTitle()
     {
-        if (preg_match('#<title>(.*?) \([^)]*\d{4}\) - IMDb#', $this->data, $m))
+        if (preg_match('#<title>(.*?) (\([^)]*\d{4}\) )?- IMDb#', $this->data, $m))
             $this->movieInfo->setTitle($m[1]);
     }
 
