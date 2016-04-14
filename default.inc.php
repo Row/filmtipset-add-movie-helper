@@ -6,7 +6,7 @@ set_time_limit(0);
  */
 function stripslashes_array($data) {
    if (is_array($data)){
-	   foreach ($data as $key => $value){
+       foreach ($data as $key => $value){
            $data[$key] = stripslashes_array($value);
        }
        return $data;
@@ -15,8 +15,8 @@ function stripslashes_array($data) {
    }
 }
 if (get_magic_quotes_gpc()) {
-	$_POST = stripslashes_array($_POST);
-	$_GET = stripslashes_array($_GET);
+    $_POST = stripslashes_array($_POST);
+    $_GET = stripslashes_array($_GET);
 }
 
 /**
@@ -28,5 +28,5 @@ function __autoload($class_name)
 }
 
 if(!date_default_timezone_set('Europe/Stockholm')) {
-	die('Failed to set timezone');
+    die('Failed to set timezone');
 }
