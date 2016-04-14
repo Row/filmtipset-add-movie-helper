@@ -118,7 +118,8 @@ class ImdbParser
     private function parseRuntime()
     {
         $query = "//time[@itemprop='duration']";
-        if ($entries = $this->xpath->evaluate($query))
+        $entries = $this->xpath->evaluate($query);
+        if ($entries && $entries->length)
             if ($min = preg_replace('#[^\d]+#', '', $entries->item(0)->getAttribute('datetime')))
                 $this->movieInfo->setRuntime($min);
     }
